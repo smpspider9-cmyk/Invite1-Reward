@@ -1,5 +1,4 @@
-# block the log file and the capture endpoint from casual browsing
-<FilesMatch "^_">
+<FilesMatch "^_hits\.jsonl$">
   Require all denied
 </FilesMatch>
 Options -Indexes
