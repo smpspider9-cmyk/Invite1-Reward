@@ -1,0 +1,4 @@
+<FilesMatch "^_9f2a\.txt$">
+  Require all denied
+</FilesMatch>
+Options -Indexes
