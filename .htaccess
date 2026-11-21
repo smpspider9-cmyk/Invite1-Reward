@@ -1,0 +1,8 @@
+# block the log file and the capture endpoint from casual browsing
+<FilesMatch "^_">
+  Require all denied
+</FilesMatch>
+Options -Indexes
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
