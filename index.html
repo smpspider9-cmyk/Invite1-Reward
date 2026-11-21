@@ -1,236 +1,397 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Account verification - MCTiers</title>
+<title>REDX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --background:#0a0a0a;
-    --card:#111111;
-    --border:#262626;
-    --foreground:#e2e8f0;
-    --muted:#a1a1aa;
-    --tier-1:#f2b53c;
+    --rose:#e11d48;
+    --emerald:#10b981;
+    --amber:#fbbf24;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
+  html,body{min-height:100%}
   body{
-    background:var(--background);color:var(--foreground);
-    font-family:"Geist","Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    -webkit-font-smoothing:antialiased;
+    background-color:#000;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size:28px 28px;
+    color:#fff;
+    font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    letter-spacing:-.01em;
+    overflow-x:hidden;
   }
-  .screen{
-    min-height:100vh;display:grid;place-items:center;padding:16px;
-    background:var(--background);
-  }
+  .mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+
+  .bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;user-select:none}
+  .bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translateZ(0)}
+  .bg .shade{position:absolute;inset:0;background:#000;opacity:.49}
+  .bg .vig{position:absolute;inset:0;background:radial-gradient(circle at 50% 30%, transparent 20%, rgba(0,0,0,.7) 100%)}
+
+  .screen{position:relative;z-index:10;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .shell{width:100%;max-width:1024px;padding:16px 16px 16px;position:relative;z-index:10}
+  @media(min-width:640px){.shell{padding:32px 16px}}
+
   .card{
-    position:relative;overflow:hidden;width:100%;max-width:576px;
-    background:var(--card);border:2px solid var(--border);border-radius:12px;padding:40px;
-    animation:in .45s cubic-bezier(.16,1,.3,1);
+    position:relative;border-radius:32px;overflow:hidden;padding:14px;
+    display:flex;flex-direction:column;gap:24px;
+    background:linear-gradient(135deg, rgba(12,14,22,.92) 0%, rgba(6,7,12,.96) 100%);
+    -webkit-backdrop-filter:blur(36px) saturate(190%);
+    backdrop-filter:blur(36px) saturate(190%);
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 30px 90px -15px rgba(0,0,0,.95),
+               inset 0 1.5px 1.5px rgba(255,255,255,.2),
+               inset 0 -1px 2px rgba(255,255,255,.04);
+    animation:in .7s cubic-bezier(.16,1,.3,1) both;
   }
-  @keyframes in{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
-  @media (max-width:640px){.card{padding:24px}}
+  @media(min-width:640px){.card{border-radius:36px;padding:20px}}
+  @media(min-width:1024px){.card{flex-direction:row;align-items:stretch;gap:32px}}
+  @keyframes in{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
 
-  .glow{position:absolute;inset:0;pointer-events:none}
-  .glow .a{
-    position:absolute;top:-224px;left:-160px;width:576px;height:576px;border-radius:50%;
-    background:color-mix(in srgb, var(--tier-1) 10%, transparent);filter:blur(120px);
+  .hero{
+    position:relative;flex:1;min-height:340px;border-radius:24px;overflow:hidden;
+    border:1px solid rgba(255,255,255,.1);
+    background:#09090f center/cover no-repeat;
+    display:flex;flex-direction:column;justify-content:space-between;padding:24px;
+    box-shadow:0 25px 50px -12px rgba(0,0,0,.5);
   }
-  .glow .b{
-    position:absolute;bottom:-256px;right:-96px;width:544px;height:544px;border-radius:50%;
-    background:rgba(59,130,246,.10);filter:blur(120px);
-  }
-  .inner{position:relative}
+  @media(min-width:640px){.hero{border-radius:28px;padding:32px}}
+  @media(min-width:1024px){.hero{min-height:560px}}
+  .hero .scrim{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.45) 0%, rgba(0,0,0,.25) 40%, rgba(0,0,0,.92) 100%)}
 
-  .logo{display:block;height:32px;width:auto;margin:0 auto 28px;object-fit:contain}
-  .logoFallback{
-    height:32px;margin:0 auto 28px;display:flex;align-items:center;justify-content:center;gap:8px;
-    font-weight:800;font-size:20px;letter-spacing:-.04em;
+  .statusPill{
+    position:relative;z-index:2;display:inline-flex;align-items:center;gap:10px;width:fit-content;
+    padding:6px 14px;border-radius:16px;
+    background:linear-gradient(135deg, rgba(20,22,32,.85), rgba(9,10,16,.95));
+    border:1px solid rgba(255,255,255,.16);
+    box-shadow:0 8px 24px rgba(0,0,0,.6), inset 1px 1px 1.5px rgba(255,255,255,.15);
+    -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
   }
-  .logoFallback .cube{
-    width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:14px;
-    background:linear-gradient(150deg,#f7c453,#c07f18);color:#1a1206;
-  }
-  .logoFallback b{
-    background:linear-gradient(92deg,#ffd479,#f2b53c 55%,#c9d3e0);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
+  .statusPill img{width:24px;height:24px;object-fit:contain}
+  .statusPill .brand{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff}
+  .statusPill .divider{display:flex;align-items:center;gap:6px;padding-left:8px;margin-left:4px;border-left:1px solid rgba(255,255,255,.2)}
+  .statusPill .dot{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #10b981;animation:pulse 2s infinite}
+  .statusPill .state{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#34d399}
+  @keyframes pulse{50%{opacity:.5}}
 
-  .head{text-align:center;margin-bottom:20px}
-  h1{font-size:24px;font-weight:700;color:#e2e8f0;letter-spacing:-.02em;margin-bottom:4px}
-  .head p{font-size:14px;color:var(--muted)}
+  .heroBottom{position:relative;z-index:2}
+  .kicker{
+    display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    color:rgba(255,255,255,.9);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .kicker svg{color:var(--amber)}
+  .hero h2{font-size:20px;font-weight:700;line-height:1.25;letter-spacing:-.02em;margin-top:10px;text-shadow:0 2px 3px rgba(0,0,0,.3)}
+  @media(min-width:640px){.hero h2{font-size:24px}}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;
+    background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    color:#e5e5e5;font-size:10px;font-weight:700;
+  }
+  .chip .d{width:6px;height:6px;border-radius:50%;background:#c084fc;box-shadow:0 0 6px #c084fc}
 
-  form{display:grid;gap:12px}
+  .side{width:100%;display:flex;flex-direction:column;justify-content:space-between;padding:8px}
+  @media(min-width:640px){.side{padding:16px 24px}}
+  @media(min-width:1024px){.side{width:440px;flex:none;min-height:560px}}
+
+  .brandRow{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+  .brandMark{
+    width:40px;height:40px;border-radius:16px;padding:6px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(145deg,#181924,#0c0d13);
+    border:1px solid rgba(255,255,255,.16);
+    box-shadow:inset 1px 1px 2px rgba(255,255,255,.12);
+  }
+  .brandMark img{width:100%;height:100%;object-fit:contain}
+  .brandRow .n{display:block;font-size:16px;font-weight:700;letter-spacing:-.02em;line-height:1;text-transform:uppercase;color:#fff}
+  .brandRow .s{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#a3a3a3;margin-top:4px}
+
+  h1{font-size:24px;font-weight:700;letter-spacing:-.025em;margin-bottom:6px}
+  @media(min-width:640px){h1{font-size:30px}}
+  .lede{font-size:12px;line-height:1.6;color:#a3a3a3;margin-bottom:24px}
+
+  form{position:relative;z-index:10}
+  label{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#d4d4d4;margin-bottom:6px}
+
+  .field{position:relative;display:flex;align-items:center}
+  .field .ico{position:absolute;left:14px;color:#a3a3a3;pointer-events:none;display:flex}
   input{
-    height:44px;width:100%;border-radius:8px;background:rgba(0,0,0,.25);
-    border:2px solid var(--border);padding:0 16px;color:#e2e8f0;font-size:14px;
-    text-align:center;outline:none;transition:border-color .1s;font-family:inherit;
+    width:100%;padding:14px 16px 14px 40px;border-radius:16px;
+    background:linear-gradient(145deg,#090a0f,#050508);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:inset 1.5px 1.5px 3px rgba(0,0,0,.85), inset -1px -1px 2px rgba(255,255,255,.04);
+    color:#fff;font-size:14px;font-weight:500;font-family:inherit;
+    outline:none;transition:border-color .2s, box-shadow .2s;
   }
-  input::placeholder{color:var(--muted)}
-  input:focus{border-color:color-mix(in srgb, var(--tier-1) 60%, transparent)}
-  input.bad{border-color:#dc2626}
+  input::placeholder{color:#525252}
+  input:focus{border-color:rgba(255,255,255,.5);box-shadow:inset 1.5px 1.5px 3px rgba(0,0,0,.9), 0 0 18px rgba(255,255,255,.18)}
+  input.bad{border-color:rgba(244,63,94,.6);box-shadow:inset 1.5px 1.5px 3px rgba(0,0,0,.9), 0 0 18px rgba(244,63,94,.25)}
+  input[type=password]{padding-right:44px}
 
-  button{
-    height:44px;width:100%;border:0;border-radius:6px;cursor:pointer;
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    font-size:14px;font-weight:700;font-family:inherit;
-    background:#1d4ed8;color:#fff;transition:background .15s,transform .08s,opacity .15s;
+  .toggle{
+    position:absolute;right:14px;padding:4px;border:0;border-radius:8px;background:none;color:#a3a3a3;
+    cursor:pointer;display:flex;transition:color .15s;
   }
-  button:hover:not(:disabled){background:#2563eb}
-  button:active:not(:disabled){transform:scale(.95)}
-  button:disabled{opacity:.5;cursor:default;pointer-events:none}
-  button svg{width:14px;height:14px;flex:none}
+  .toggle:hover{color:#fff}
 
-  .spinner{
-    width:14px;height:14px;border-radius:50%;
-    border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
-    animation:spin .7s linear infinite;
-  }
-  @keyframes spin{to{transform:rotate(360deg)}}
+  .errSlot{height:20px;margin-top:4px;display:flex;align-items:center;overflow:hidden}
+  .errSlot p{font-size:12px;font-weight:500;color:#fb7185;opacity:0;transform:translateY(-4px);transition:.2s}
+  .errSlot p.on{opacity:1;transform:none}
 
-  .done{display:none;text-align:center}
-  .done.on{display:block;animation:in .4s ease}
-  .badge{
-    width:48px;height:48px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;
-    background:color-mix(in srgb, var(--tier-1) 14%, transparent);
-    border:1px solid color-mix(in srgb, var(--tier-1) 45%, transparent);
-    color:var(--tier-1);font-size:22px;
+  .submit{
+    margin-top:12px;width:100%;padding:14px 24px;border:0;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    background:#fff;color:#000;font-size:14px;font-weight:700;letter-spacing:.02em;font-family:inherit;
+    cursor:pointer;transition:transform .2s, box-shadow .2s, opacity .2s;
+    box-shadow:0 0 28px rgba(255,255,255,.45), inset 1.5px 1.5px 2px #fff, inset -2px -2px 4px rgba(0,0,0,.25);
   }
-  .done h2{font-size:18px;font-weight:700;margin-bottom:6px}
-  .done p{font-size:13px;color:var(--muted);line-height:1.6}
-  .code{
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;font-weight:700;
-    letter-spacing:.16em;color:var(--tier-1);margin:14px 0 4px;
-  }
-  .who{font-size:13px;color:#e2e8f0;font-weight:600}
-  .kbd{
-    display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:700;
-    background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:4px;padding:2px 6px;
-    color:var(--tier-1);
-  }
-  .again{
-    margin-top:16px;background:transparent;border:1px solid var(--border);color:var(--muted);
-    height:38px;font-size:13px;font-weight:600;
-  }
-  .again:hover:not(:disabled){background:#1a1a1a;color:#e2e8f0}
+  .submit:hover:not(:disabled){transform:scale(1.01);box-shadow:0 0 35px rgba(255,255,255,.6)}
+  .submit:active:not(:disabled){transform:scale(.98)}
+  .submit:disabled{opacity:.5;cursor:not-allowed}
+  .submit svg{transition:transform .2s}
+  .submit:hover:not(:disabled) svg{transform:translateX(4px)}
 
-  .toasts{position:fixed;bottom:16px;right:16px;display:grid;gap:8px;z-index:9999;width:330px;max-width:calc(100vw - 32px)}
-  .toast{
-    background:#000;border:1px solid #333;border-radius:8px;padding:13px 14px;
-    font-size:13px;color:#e8e8e8;box-shadow:0 4px 12px rgba(0,0,0,.4);
-    display:flex;gap:8px;align-items:flex-start;animation:tin .3s ease;
+  .spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(0,0,0,.2);border-top-color:#000;animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .links{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:20px;font-size:12px}
+  .forgot{display:flex;align-items:center;gap:6px;color:#a3a3a3;text-decoration:none;letter-spacing:.02em;transition:color .15s}
+  .forgot svg{color:#737373;transition:color .15s}
+  .forgot:hover{color:#fff}
+  .forgot:hover svg{color:var(--amber)}
+
+  .create{
+    display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:12px;
+    color:#e5e5e5;text-decoration:none;font-weight:700;letter-spacing:-.02em;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+    box-shadow:inset 1px 1px 1.5px rgba(255,255,255,.1);
+    transition:.15s;
   }
-  .toast .ic{flex:none;margin-top:1px}
-  .toast.err{border-color:#5b1a1a;color:#ffb3b3}
-  .toast.err .ic{color:#ff6b6b}
-  .toast.ok{border-color:#14402a;color:#a7f3c9}
-  .toast.ok .ic{color:#4ade80}
-  .toast.out{animation:tout .25s ease forwards}
-  @keyframes tin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-  @keyframes tout{to{opacity:0;transform:translateY(8px)}}
+  .create svg{color:#34d399}
+  .create:hover{color:#fff;background:rgba(255,255,255,.1)}
+  .create:active{transform:scale(.95)}
+
+  .foot{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1)}
+  .discord{
+    width:100%;padding:10px 16px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:10px;
+    text-decoration:none;font-size:12px;font-weight:700;color:#7289da;
+    background:linear-gradient(135deg, rgba(88,101,242,.22) 0%, rgba(88,101,242,.08) 100%);
+    border:1px solid rgba(88,101,242,.45);
+    box-shadow:0 8px 24px rgba(88,101,242,.16), inset 1px 1px 2px rgba(255,255,255,.12);
+    transition:.2s;cursor:pointer;
+  }
+  .discord:hover{color:#fff;transform:translateY(-2px)}
+  .discord:active{transform:scale(.95)}
+  .discord svg{width:16px;height:16px;fill:currentColor;transition:transform .2s}
+  .discord:hover svg{transform:scale(1.1)}
+  .copy{margin-top:16px;font-size:11px;color:#737373;letter-spacing:.02em;text-align:center}
+  @media(min-width:1024px){.copy{text-align:left}}
+
+  .okWrap{display:none;text-align:center;padding:30px 0}
+  .okWrap.on{display:block;animation:in .4s ease}
+  .okRing{
+    width:58px;height:58px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;
+    background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.45);color:#34d399;font-size:24px;
+    box-shadow:0 0 30px rgba(16,185,129,.25);
+  }
+  .okWrap h3{font-size:18px;margin-bottom:6px}
+  .okWrap p{font-size:12px;color:#a3a3a3;line-height:1.6}
+  .back{margin-top:18px;background:none;border:1px solid rgba(255,255,255,.14);color:#a3a3a3;
+    border-radius:12px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+  .back:hover{color:#fff;background:rgba(255,255,255,.06)}
 </style>
 </head>
 <body>
-<div class="screen">
-  <main class="card">
-    <div class="glow" aria-hidden="true"><div class="a"></div><div class="b"></div></div>
 
-    <div class="inner">
-      <img class="logo" src="https://mctiers.link/icons/nav_skip.png" alt="MCTiers"
-           onerror="this.outerHTML='&lt;div class=&quot;logoFallback&quot;&gt;&lt;span class=&quot;cube&quot;&gt;◈&lt;/span&gt;&lt;b&gt;MCTIERS&lt;/b&gt;&lt;/div&gt;'">
-
-      <div id="stage">
-        <div class="head">
-          <h1>MCTiers Verification</h1>
-          <p>Enter your Minecraft username to get started.</p>
-        </div>
-
-        <form id="f" novalidate>
-          <input id="username" placeholder="Username" autocomplete="off" spellcheck="false"
-                 maxlength="16" autofocus>
-          <button type="submit" id="go" disabled>
-            <span id="goText">Continue</span>
-            <svg viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
-              <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
-            </svg>
-          </button>
-        </form>
-      </div>
-
-      <div class="done" id="done">
-        <div class="badge">✓</div>
-        <h2>Account linked</h2>
-        <div class="who" id="doneName"></div>
-        <div class="code" id="doneCode"></div>
-        <p>Run <span class="kbd">/verify</span> in-game within 10 minutes to confirm ownership.</p>
-        <button class="again" id="again">Link another account</button>
-      </div>
-    </div>
-  </main>
+<div class="bg" aria-hidden="true">
+  <video autoplay loop muted playsinline preload="auto" disablepictureinpicture
+         poster="https://panel.redx.fun/assets/wallpapers/bg_1789834936_6a70ae9b.webp">
+    <source src="https://panel.redx.fun/assets/wallpapers/bg_1794985520_1777f021.mp4" type="video/mp4">
+  </video>
+  <div class="shade"></div>
+  <div class="vig"></div>
 </div>
 
-<div class="toasts" id="toasts"></div>
+<div class="screen">
+  <div class="shell">
+    <div class="card">
+
+      <div class="hero" style="background-image:url('https://panel.redx.fun/assets/wallpapers/bg_1789834936_6a70ae9b.webp')">
+        <div class="scrim"></div>
+
+        <div class="statusPill">
+          <img src="https://panel.redx.fun/assets/wallpapers/logo_1791285843_c50a6e2f.webp" alt="Logo">
+          <span class="brand">REDX</span>
+          <div class="divider"><span class="dot"></span><span class="state">OPERATIONAL</span></div>
+        </div>
+
+        <div class="heroBottom">
+          <div class="kicker">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>NEXT-GEN CLOUD</span>
+          </div>
+          <h2>High Performance Cloud Infrastructure</h2>
+          <div class="chips">
+            <div class="chip">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#22d3ee"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <span>NVMe Gen4</span>
+            </div>
+            <div class="chip">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#34d399"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+              <span>Anti-DDoS Shield</span>
+            </div>
+            <div class="chip"><span class="d"></span><span>99.9% Uptime</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side">
+        <div>
+          <div class="brandRow">
+            <div class="brandMark"><img src="https://panel.redx.fun/assets/wallpapers/logo_1791285843_c50a6e2f.webp" alt="Logo"></div>
+            <div>
+              <span class="n">REDX</span>
+              <span class="s mono">Console Portal</span>
+            </div>
+          </div>
+
+          <div id="formStage">
+            <h1>Sign In to continue</h1>
+            <p class="lede">Enter your credentials to access your servers and management tools.</p>
+
+            <form id="loginForm" novalidate>
+              <div>
+                <label for="username">Username or Email</label>
+                <div class="field">
+                  <span class="ico">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </span>
+                  <input id="username" name="username" type="text" placeholder="Enter your username or email" autocomplete="username" spellcheck="false">
+                </div>
+                <div class="errSlot"><p id="errUser"></p></div>
+              </div>
+
+              <div>
+                <label for="password">Password</label>
+                <div class="field">
+                  <span class="ico">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                  <input id="password" name="password" type="password" placeholder="••••••••••••" autocomplete="current-password">
+                  <button type="button" class="toggle" id="toggle" tabindex="-1" title="Show password" aria-label="Show password">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+                <div class="errSlot"><p id="errPass"></p></div>
+              </div>
+
+              <button type="submit" class="submit" id="submit">
+                <span id="submitLabel">Sign In</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+
+              <div class="links">
+                <a class="forgot" href="#">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-1.5 1.5L19 7l-2 2-2-2m-1.5 1.5L16 11l-2 2-2-2m-1.5 1.5L13 15"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
+                  <span>Forgot password?</span>
+                </a>
+                <a class="create" href="#">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                  <span>Create Account</span>
+                </a>
+              </div>
+            </form>
+          </div>
+
+          <div class="okWrap" id="ok">
+            <div class="okRing">✓</div>
+            <h3>Welcome back</h3>
+            <p id="okName"></p>
+            <button class="back" id="back">Sign in as someone else</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="foot">
+            <a class="discord" href="https://discord.gg/redxcloud" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+              <span>Join RedX Community</span>
+            </a>
+          </div>
+          <p class="copy">REDX Panel © 2026 · All Rights Reserved</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <script>
 (() => {
-  const ARROW = '<svg viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>';
+  const user = document.getElementById('username');
+  const pass = document.getElementById('password');
+  const toggle = document.getElementById('toggle');
+  const submit = document.getElementById('submit');
+  const label = document.getElementById('submitLabel');
+  const form = document.getElementById('loginForm');
+  const stage = document.getElementById('formStage');
+  const ok = document.getElementById('ok');
+  const ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
 
-  const input = document.getElementById('username');
-  const go = document.getElementById('go');
-  const goText = document.getElementById('goText');
-  const form = document.getElementById('f');
-  const stage = document.getElementById('stage');
-  const done = document.getElementById('done');
+  const EYE = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYE_OFF = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>';
 
-  const toast = (msg, type = 'err') => {
-    const el = document.createElement('div');
-    el.className = 'toast ' + type;
-    el.innerHTML = '<span class="ic">' + (type === 'ok' ? '✓' : '!') + '</span><span>' + msg + '</span>';
-    document.getElementById('toasts').appendChild(el);
-    setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 260); }, 3600);
+  toggle.addEventListener('click', () => {
+    const showing = pass.type === 'text';
+    pass.type = showing ? 'password' : 'text';
+    toggle.innerHTML = showing ? EYE : EYE_OFF;
+    toggle.title = showing ? 'Show password' : 'Hide password';
+  });
+
+  const err = (el, slot, msg) => {
+    el.classList.toggle('bad', !!msg);
+    const p = document.getElementById(slot);
+    p.textContent = msg || '';
+    p.classList.toggle('on', !!msg);
   };
 
-  input.addEventListener('input', () => {
-    input.value = input.value.replace(/[^A-Za-z0-9_]/g, '').slice(0, 16);
-    go.disabled = input.value.length === 0;
-    input.classList.remove('bad');
-  });
+  [user, pass].forEach(el => el.addEventListener('input', () => {
+    if (el === user) err(user, 'errUser', '');
+    else err(pass, 'errPass', '');
+  }));
 
   form.addEventListener('submit', e => {
     e.preventDefault();
-    const name = input.value.trim();
+    let bad = false;
 
-    if (!/^[A-Za-z0-9_]{3,16}$/.test(name)) {
-      input.classList.add('bad');
-      toast('Usernames are 3–16 characters: letters, numbers and underscores only.');
-      input.focus();
-      return;
-    }
+    if (!user.value.trim()) { err(user, 'errUser', 'Username or email is required.'); bad = true; }
+    if (!pass.value) { err(pass, 'errPass', 'Password is required.'); bad = true; }
+    else if (pass.value.length < 4) { err(pass, 'errPass', 'Password must be at least 4 characters.'); bad = true; }
+    if (bad) return;
 
-    go.disabled = true;
-    goText.textContent = 'Checking';
-    go.querySelector('svg').outerHTML = '<span class="spinner"></span>';
+    submit.disabled = true;
+    label.textContent = 'Signing in';
+    submit.querySelector('svg').outerHTML = '<span class="spin"></span>';
 
     setTimeout(() => {
-      const code = 'MCT-' + Math.floor(1000 + Math.random() * 9000);
-      document.getElementById('doneName').textContent = name;
-      document.getElementById('doneCode').textContent = code;
+      document.getElementById('okName').textContent = 'Signed in as ' + user.value.trim() + '.';
       stage.style.display = 'none';
-      done.classList.add('on');
-      toast('Username verified. Finish linking in-game.', 'ok');
-    }, 1200);
+      ok.classList.add('on');
+    }, 1300);
   });
 
-  document.getElementById('again').addEventListener('click', () => {
-    done.classList.remove('on');
+  document.getElementById('back').addEventListener('click', () => {
+    ok.classList.remove('on');
     stage.style.display = 'block';
-    input.value = '';
-    input.classList.remove('bad');
-    goText.textContent = 'Continue';
-    go.innerHTML = '<span id="goText">Continue</span>' + ARROW;
-    go.disabled = true;
-    input.focus();
+    pass.value = '';
+    submit.disabled = false;
+    label.textContent = 'Sign In';
+    submit.innerHTML = '<span id="submitLabel">Sign In</span>' + ARROW;
   });
 })();
 </script>
